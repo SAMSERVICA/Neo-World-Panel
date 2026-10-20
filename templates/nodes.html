@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}نودها{% endblock %}
+{% block content %}
+<div class="card">
+  <h2 style="font-size:1.1rem;margin-bottom:14px">نودها و سرورهای فعال</h2>
+  <table style="width:100%;border-collapse:collapse;text-align:start">
+    <thead>
+      <tr style="color:var(--muted2);border-bottom:1px solid var(--border)">
+        <th style="padding:10px">نام نود</th>
+        <th style="padding:10px">پروتکل</th>
+        <th style="padding:10px">آدرس / پورت</th>
+        <th style="padding:10px">وضعیت</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for n in nodes %}
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.04)">
+        <td style="padding:12px;font-weight:700">{{ n.remark or n.name }}</td>
+        <td style="padding:12px"><span class="badge ok">{{ n.protocol|upper }}</span></td>
+        <td style="padding:12px;direction:ltr">{{ n.host }}:{{ n.port }}</td>
+        <td style="padding:12px"><span class="badge ok">فعال</span></td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">نودی تعریف نشده است.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

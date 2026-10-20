@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{{ dir }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ panel_name }}{% endblock %}</title>
+  <link rel="icon" href="/static/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+{% if admin %}
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <img src="/static/logo.svg" width="38" height="38" alt="NW">
+      <div><b>NEO WORLD</b><div style="font-size:0.7rem;color:var(--muted2)">Control Panel</div></div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:4px">
+      <a href="/" class="nav-item">داشبورد اصلی</a>
+      <a href="/users" class="nav-item">کاربران</a>
+      <a href="/nodes" class="nav-item">نودها و سرورها</a>
+      <a href="/subs" class="nav-item">اشتراک‌ها</a>
+      <a href="/protocols" class="nav-item">پروتکل‌ها</a>
+      <a href="/profile" class="nav-item">پروفایل کاربری</a>
+    </nav>
+  </aside>
+  <div style="display:flex;flex-direction:column;min-width:0">
+    <header class="topbar">
+      <b>Neo World Panel</b>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button onclick="toggleTheme()" class="btn ghost sm">🌓 حالت شب/روز</button>
+        <a href="/profile" style="width:34px;height:34px;border-radius:50%;background:var(--grad);display:grid;place-items:center;overflow:hidden">
+          {% if admin_avatar %}<img src="{{ admin_avatar }}" style="width:100%;height:100%;object-fit:cover">{% else %}{{ admin[0]|upper }}{% endif %}
+        </a>
+      </div>
+    </header>
+    <main class="page">{% block content %}{% endblock %}</main>
+    <footer style="padding:16px;text-align:center;color:var(--muted2);font-size:0.75rem;border-top:1px solid var(--border)">
+      © 2026 <b>Neo World Panel</b> — تمامی حقوق محفوظ است.
+    </footer>
+  </div>
+</div>
+{% else %}{% block auth %}{% endblock %}{% endif %}
+<script src="/static/app.js"></script>
+</body>
+</html>

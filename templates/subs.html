@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}اشتراک‌ها{% endblock %}
+{% block content %}
+<div class="card">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <h2 style="font-size:1.1rem">اشتراک‌های فعال</h2>
+    <button class="btn sm" onclick="copyAllRaw()">📋 کپی تمامی کانفیگ‌ها (یکجا)</button>
+  </div>
+  <table style="width:100%;border-collapse:collapse;text-align:start">
+    <thead>
+      <tr style="color:var(--muted2);border-bottom:1px solid var(--border)">
+        <th style="padding:10px">کاربر</th>
+        <th style="padding:10px">لینک مستقیم اشتراک</th>
+        <th style="padding:10px">عملیات</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.04)">
+        <td style="padding:12px;font-weight:700">{{ it.s.username }}</td>
+        <td style="padding:12px;direction:ltr;font-family:monospace;font-size:0.75rem">{{ it.link }}</td>
+        <td style="padding:12px">
+          <button class="btn sm ghost" onclick="navigator.clipboard.writeText('{{ it.link }}').then(() => alert('لینک اشتراک کپی شد ✓'))">کپی لینک ساب</button>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="3" style="text-align:center;padding:20px;color:var(--muted)">موردی ثبت نشده است.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+const rawConfigs = `{{ all_configs }}`;
+function copyAllRaw() {
+  navigator.clipboard.writeText(rawConfigs.trim()).then(() => alert('تمامی کانفیگ‌های موجود در پنل یکجا کپی شدند ✓'));
+}
+</script>
+{% endblock %}

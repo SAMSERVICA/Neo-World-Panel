@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}پروفایل کاربری{% endblock %}
+{% block content %}
+<div style="max-width:600px;margin:0 auto">
+  <div class="card" style="text-align:center;padding:34px 20px">
+    <div style="position:relative;width:96px;height:96px;margin:0 auto 16px auto">
+      <div id="avatar-preview" style="width:100%;height:100%;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-size:2rem;overflow:hidden;box-shadow:0 0 16px rgba(117,81,255,0.5)">
+        {% if me.avatar %}<img src="{{ me.avatar }}" style="width:100%;height:100%;object-fit:cover">{% else %}{{ me.username[0]|upper }}{% endif %}
+      </div>
+      <label for="img-in" style="position:absolute;bottom:0;inset-inline-end:0;background:var(--primary);color:#fff;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;cursor:pointer">📷</label>
+      <input type="file" id="img-in" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
+    </div>
+    <h2 style="font-size:1.25rem">{{ me.username }}</h2>
+    <span style="color:var(--muted2);font-size:0.8rem">Super Admin</span>
+  </div>
+</div>
+
+<script>
+function uploadAvatar(input) {
+  if (input.files && input.files[0]) {
+    const r = new FileReader();
+    r.onload = function(e) {
+      const b64 = e.target.result;
+      document.getElementById('avatar-preview').innerHTML = `<img src="${b64}" style="width:100%;height:100%;object-fit:cover">`;
+      fetch('/api/profile/avatar', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'avatar=' + encodeURIComponent(b64)
+      }).then(() => alert('تصویر پروفایل شما ذخیره شد ✓'));
+    };
+    r.readAsDataURL(input.files[0]);
+  }
+}
+</script>
+{% endblock %}

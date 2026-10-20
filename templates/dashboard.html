@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}داشبورد اصلی{% endblock %}
+{% block content %}
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-icon">👥</div>
+    <div><span style="color:var(--muted);font-size:0.75rem">کاربران کل</span><b>{{ subs_count }}</b></div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon">✅</div>
+    <div><span style="color:var(--muted);font-size:0.75rem">اشتراک‌های فعال</span><b>{{ active_subs }}</b></div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon">⚡</div>
+    <div><span style="color:var(--muted);font-size:0.75rem">هسته Xray</span><b>آنلاین</b></div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon">🌐</div>
+    <div><span style="color:var(--muted);font-size:0.75rem">نودهای فعال</span><b>{{ enabled_nodes }} / {{ nodes_count }}</b></div>
+  </div>
+</div>
+
+<h2 style="font-size:1.1rem;font-weight:800;margin-bottom:14px">پروتکل‌های اتصال (۳ ستونه شیشه‌ای)</h2>
+<div class="proto-3col">
+  <div class="proto-card">
+    <div class="proto-ic">⚡</div>
+    <b>VLESS Reality</b>
+    <p style="color:var(--muted);font-size:0.75rem;margin-top:6px">ضد فیلترینگ با بالاترین سطح شبیه‌سازی ترافیک امن.</p>
+  </div>
+  <div class="proto-card">
+    <div class="proto-ic" style="background:linear-gradient(135deg,#00F0FF,#7551FF)">✈</div>
+    <b>VMess WS</b>
+    <p style="color:var(--muted);font-size:0.75rem;margin-top:6px">پروتکل فوق‌العاده پایدار و سازگار با تمام دستگاه‌ها.</p>
+  </div>
+  <div class="proto-card">
+    <div class="proto-ic" style="background:linear-gradient(135deg,#FF007A,#7551FF)">🛡</div>
+    <b>Trojan TLS</b>
+    <p style="color:var(--muted);font-size:0.75rem;margin-top:6px">رمزنگاری پیشرفته دقیقاً مانند ترافیک وب‌سایت‌های عادی.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h3 style="font-size:1rem;margin-bottom:14px">وضعیت نودها و سرورها</h3>
+  <table style="width:100%;border-collapse:collapse;text-align:start">
+    <thead>
+      <tr style="color:var(--muted2);border-bottom:1px solid var(--border)">
+        <th style="padding:10px">نام نود</th>
+        <th style="padding:10px">پروتکل</th>
+        <th style="padding:10px">آدرس</th>
+        <th style="padding:10px">وضعیت</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for n in nodes %}
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.04)">
+        <td style="padding:12px;font-weight:700">{{ n.remark or n.name }}</td>
+        <td style="padding:12px"><span class="badge ok">{{ n.protocol|upper }}</span></td>
+        <td style="padding:12px;direction:ltr">{{ n.host }}:{{ n.port }}</td>
+        <td style="padding:12px"><span class="badge ok">آنلاین</span></td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">هیچ نودی اضافه نشده است.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

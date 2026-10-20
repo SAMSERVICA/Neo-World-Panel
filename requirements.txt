@@ -1,0 +1,9 @@
+fastapi==0.115.14
+uvicorn[standard]==0.34.3
+SQLAlchemy==2.0.41
+bcrypt==4.3.0
+Jinja2==3.1.6
+python-multipart==0.0.20
+itsdangerous==2.2.0
+psycopg2-binary==2.9.10
+qrcode==8.2

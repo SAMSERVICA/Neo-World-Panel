@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ 'ساخت ادمین' if mode == 'setup' else 'ورود' }}{% endblock %}
+{% block auth %}
+<div style="min-height:100vh;display:grid;place-items:center;padding:20px;direction:rtl">
+  <div class="card" style="max-width:400px;width:100%;text-align:center;padding:34px 24px">
+    <img src="/static/logo.svg" width="56" height="56" alt="NW" style="margin-bottom:12px">
+    <h1 style="font-size:1.35rem;font-weight:800;margin-bottom:6px">{{ 'راه‌اندازی ادمین Neo World' if mode == 'setup' else 'ورود به پنل Neo World' }}</h1>
+    <p style="color:var(--muted);font-size:0.8rem;margin-bottom:20px">{{ 'اولین اکانت مدیر سیستم را بسازید' if mode == 'setup' else 'اطلاعات ورود را وارد نمایید' }}</p>
+    
+    <form id="auth-form" style="display:flex;flex-direction:column;gap:14px;text-align:start">
+      <div>
+        <label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">نام کاربری</label>
+        <input name="username" required style="width:100%;padding:11px;border-radius:var(--radius-sm);background:var(--panel2);border:1px solid var(--border);color:#fff;outline:0">
+      </div>
+      <div>
+        <label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">رمز عبور (حداقل ۴ نویسه)</label>
+        <input name="password" type="password" required style="width:100%;padding:11px;border-radius:var(--radius-sm);background:var(--panel2);border:1px solid var(--border);color:#fff;outline:0">
+      </div>
+      <div id="auth-err" style="color:var(--danger);font-size:0.75rem"></div>
+      <button class="btn" type="submit" style="width:100%;margin-top:6px">{{ 'ساخت ادمین' if mode == 'setup' else 'ورود به سیستم' }}</button>
+    </form>
+  </div>
+</div>
+
+<script>
+document.getElementById('auth-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const isSetup = {{ 'true' if mode == 'setup' else 'false' }};
+  const url = isSetup ? '/api/auth/setup' : '/api/auth/login';
+  const res = await fetch(url, { method: 'POST', body: fd });
+  const data = await res.json();
+  if (res.ok) { window.location.href = '/'; }
+  else { document.getElementById('auth-err').innerText = data.error === 'password_too_short' ? 'رمز عبور باید حداقل ۴ نویسه باشد' : 'اطلاعات نامعتبر است'; }
+});
+</script>
+{% endblock %}

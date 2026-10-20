@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}کاربران{% endblock %}
+{% block content %}
+<div class="card">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <h2 style="font-size:1.1rem">مدیریت کاربران</h2>
+    <button class="btn sm" onclick="document.getElementById('new-u-modal').style.display='block'">+ افزودن کاربر</button>
+  </div>
+  <table style="width:100%;border-collapse:collapse;text-align:start">
+    <thead>
+      <tr style="color:var(--muted2);border-bottom:1px solid var(--border)">
+        <th style="padding:10px">نام کاربری</th>
+        <th style="padding:10px">لینک اشتراک</th>
+        <th style="padding:10px">وضعیت</th>
+        <th style="padding:10px">عملیات</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.04)">
+        <td style="padding:12px;font-weight:700">{{ it.s.username }}</td>
+        <td style="padding:12px">
+          <a class="btn ghost sm" href="/sub/{{ it.s.token }}" target="_blank">باز کردن صفحه ساب ↗</a>
+        </td>
+        <td style="padding:12px">
+          <button class="badge {{ 'ok' if it.s.active else 'warn' }}" onclick="toggleUser({{ it.s.id }})">{{ 'فعال' if it.s.active else 'غیرفعال' }}</button>
+        </td>
+        <td style="padding:12px">
+          <button class="btn sm ghost" style="color:var(--danger)" onclick="deleteUser({{ it.s.id }})">حذف</button>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">کاربری وجود ندارد.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div id="new-u-modal" class="card" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99;max-width:400px;width:90%">
+  <h3>ساخت کاربر جدید</h3>
+  <form onsubmit="createUser(event)" style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+    <input id="new-username" placeholder="نام کاربری" required style="padding:10px;border-radius:var(--radius-sm);background:var(--panel2);border:1px solid var(--border);color:#fff">
+    <input id="new-traffic" type="number" value="30" placeholder="حجم به گیگابایت" style="padding:10px;border-radius:var(--radius-sm);background:var(--panel2);border:1px solid var(--border);color:#fff">
+    <div style="display:flex;gap:8px">
+      <button class="btn" type="submit">ذخیره</button>
+      <button class="btn ghost" type="button" onclick="document.getElementById('new-u-modal').style.display='none'">انصراف</button>
+    </div>
+  </form>
+</div>
+
+<script>
+async function createUser(e) {
+  e.preventDefault();
+  const u = document.getElementById('new-username').value;
+  const t = document.getElementById('new-traffic').value;
+  await fetch('/api/users', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `username=${encodeURIComponent(u)}&traffic_limit=${encodeURIComponent(t)}`
+  });
+  window.location.reload();
+}
+async function toggleUser(id) {
+  await fetch(`/api/users/${id}/toggle`, { method: 'POST' });
+  window.location.reload();
+}
+async function deleteUser(id) {
+  if (confirm('حذف شود؟')) {
+    await fetch(`/api/users/${id}`, { method: 'DELETE' });
+    window.location.reload();
+  }
+}
+</script>
+{% endblock %}
